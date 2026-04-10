@@ -1,4 +1,9 @@
 FROM busybox:latest
-HEALTHCHECK --interval=1m --timeout=3s CMD true || exit 1
-ENTRYPOINT [ "/entrypoint.sh" ]
+
+LABEL org.opencontainers.image.title="idle" \
+    org.opencontainers.image.description="Minimal idle container for orchestration scaling checks"
+
 COPY entrypoint.sh /
+
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/entrypoint.sh"]

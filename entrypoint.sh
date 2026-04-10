@@ -1,12 +1,21 @@
 #!/bin/sh
+set -eu
+
+child_pid=""
 
 die() {
     echo "...exiting"
-    exit 1
+    if [ -n "$child_pid" ]; then
+        kill "$child_pid" 2>/dev/null || true
+        wait "$child_pid" 2>/dev/null || true
+    fi
+    exit 0
 }
-trap die TERM
+
+trap die TERM INT
 
 echo "sleeping..."
 
-sleep 3653d &
-wait
+sleep infinity &
+child_pid="$!"
+wait "$child_pid"
